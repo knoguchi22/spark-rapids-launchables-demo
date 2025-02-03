@@ -10,6 +10,8 @@ services:
     ports:
       - "8080:8080"
     command: ["/opt/spark/sbin/start-master.sh"]
+    volumes: 
+      - sparkvol:/opt/spark
   spark-worker:
     image: "docker.io/knoguchi22/spark-rapids-launchables-demo:latest"
     container_name: spark-worker
@@ -21,6 +23,8 @@ services:
     ports:
       - "8081:8081"
     command: ["/opt/spark/sbin/start-worker.sh"]
+    volumes: 
+      - sparkvol:/opt/spark
   spark-history-server:
     image: "docker.io/knoguchi22/spark-rapids-launchables-demo:latest"
     container_name: spark-history-server
@@ -32,6 +36,8 @@ services:
     ports:
       - "18080:18080"
     command: ["/opt/spark/sbin/start-history-server.sh"]
+    volumes: 
+      - sparkvol:/opt/spark
   jupyter:
     image: "docker.io/knoguchi22/spark-rapids-launchables-demo:latest"
     container_name: jupyter
@@ -42,3 +48,8 @@ services:
     ports:
       - "8888:8888"
     command: ["/usr/local/bin/jupyter", "notebook"]
+    volumes: 
+      - sparkvol:/opt/spark
+
+volumes: 
+  sparkvol:
