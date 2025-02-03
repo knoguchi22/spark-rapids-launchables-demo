@@ -1,0 +1,12 @@
+services:
+  spark-master:
+    image: "docker.io/knoguchi22/spark-rapids-launchables-demo:latest"
+    container_name: spark-master
+    hostname: spark-master
+    user: spark 
+    environment:
+      - SPARK_HOME=/opt/spark
+      - SPARK_MASTER_WEBUI_PORT=443
+    ports:
+      - "443:8080"
+    command: ["/opt/spark/sbin/start-master.sh"]
