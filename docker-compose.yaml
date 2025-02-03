@@ -6,7 +6,7 @@ services:
     user: spark
     environment:
       - SPARK_HOME=/opt/spark
-      - SPARK_MASTER_WEBUI_PORT=8080
+      - SPARK_NO_DAEMONIZE=true
     ports:
       - "8080:8080"
     command: ["/opt/spark/sbin/start-master.sh"]
@@ -17,7 +17,7 @@ services:
     user: spark
     environment:
       - SPARK_HOME=/opt/spark
-      - SPARK_MASTER_WEBUI_PORT=8081
+      - SPARK_NO_DAEMONIZE=true
     ports:
       - "8081:8081"
     command: ["/opt/spark/sbin/start-worker.sh"]
@@ -28,6 +28,7 @@ services:
     user: spark
     environment:
       - SPARK_HOME=/opt/spark
+      - SPARK_NO_DAEMONIZE=true
     ports:
       - "18080:18080"
     command: ["/opt/spark/sbin/start-history-server.sh"]
