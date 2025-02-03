@@ -3,7 +3,7 @@ services:
     image: "docker.io/knoguchi22/spark-rapids-launchables-demo:latest"
     container_name: spark-master
     hostname: spark-master
-    user: spark 
+    user: spark
     environment:
       - SPARK_HOME=/opt/spark
       - SPARK_MASTER_WEBUI_PORT=8080
@@ -12,12 +12,22 @@ services:
     command: ["/opt/spark/sbin/start-master.sh"]
   spark-worker:
     image: "docker.io/knoguchi22/spark-rapids-launchables-demo:latest"
-    container_name: spark-master
+    container_name: spark-worker
     hostname: spark-master
-    user: spark 
+    user: spark
     environment:
       - SPARK_HOME=/opt/spark
       - SPARK_MASTER_WEBUI_PORT=8081
     ports:
       - "8081:8081"
     command: ["/opt/spark/sbin/start-worker.sh"]
+  jupyter:
+    image: "docker.io/knoguchi22/spark-rapids-launchables-demo:latest"
+    container_name: jupyter
+    hostname: jupyter
+    user: spark
+    environment:
+      - SPARK_HOME=/opt/spark
+    ports:
+      - "8888:8888"
+    command: ["/usr/local/bin/jupyter", "notebook"]
