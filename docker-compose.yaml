@@ -32,7 +32,6 @@ services:
     user: spark
     environment:
       - SPARK_HOME=/opt/spark
-      - SPARK_NO_DAEMONIZE=true
     ports:
       - "18080:18080"
     command: ["/opt/spark/sbin/start-history-server.sh"]
