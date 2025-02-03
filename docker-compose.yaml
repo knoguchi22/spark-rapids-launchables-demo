@@ -13,7 +13,7 @@ services:
   spark-worker:
     image: "docker.io/knoguchi22/spark-rapids-launchables-demo:latest"
     container_name: spark-worker
-    hostname: spark-master
+    hostname: spark-worker
     user: spark
     environment:
       - SPARK_HOME=/opt/spark
@@ -21,10 +21,10 @@ services:
     ports:
       - "8081:8081"
     command: ["/opt/spark/sbin/start-worker.sh"]
-  spark-worker:
+  spark-history-server:
     image: "docker.io/knoguchi22/spark-rapids-launchables-demo:latest"
-    container_name: spark-worker
-    hostname: spark-master
+    container_name: spark-history-server
+    hostname: spark-history-server
     user: spark
     environment:
       - SPARK_HOME=/opt/spark
