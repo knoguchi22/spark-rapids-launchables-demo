@@ -5,38 +5,47 @@ services:
     hostname: spark-master
     user: spark
     environment:
-      - SPARK_HOME=/opt/spark
       - SPARK_NO_DAEMONIZE=true
+      - SPARK_HOME=/opt/spark
     ports:
       - "8080:8080"
     command: ["/opt/spark/sbin/start-master.sh"]
     volumes: 
       - sparkvol:/opt/spark
+    networks:
+      - spark
   spark-worker:
     image: "docker.io/knoguchi22/spark-rapids-launchables-demo:latest"
     container_name: spark-worker
     hostname: spark-worker
     user: spark
     environment:
-      - SPARK_HOME=/opt/spark
       - SPARK_NO_DAEMONIZE=true
+      - SPARK_HOME=/opt/spark
     ports:
       - "8081:8081"
-    command: ["/opt/spark/sbin/start-worker.sh"]
+    command: ["/opt/spark/sbin/start-worker.sh", "spark://spark-master:7077"]
+    depends_on:
+      - spark-master
     volumes: 
       - sparkvol:/opt/spark
+    networks:
+      - spark
   spark-history-server:
     image: "docker.io/knoguchi22/spark-rapids-launchables-demo:latest"
     container_name: spark-history-server
     hostname: spark-history-server
     user: spark
     environment:
+      - SPARK_NO_DAEMONIZE=true
       - SPARK_HOME=/opt/spark
     ports:
       - "18080:18080"
     command: ["/opt/spark/sbin/start-history-server.sh"]
     volumes: 
       - sparkvol:/opt/spark
+    networks:
+      - spark
   jupyter:
     image: "docker.io/knoguchi22/spark-rapids-launchables-demo:latest"
     container_name: jupyter
@@ -49,6 +58,11 @@ services:
     command: ["/usr/local/bin/jupyter", "notebook"]
     volumes: 
       - sparkvol:/opt/spark
+    networks:
+      - spark
 
 volumes: 
   sparkvol:
+
+networks:
+  spark:
