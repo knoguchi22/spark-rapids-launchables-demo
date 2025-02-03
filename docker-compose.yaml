@@ -6,7 +6,18 @@ services:
     user: spark 
     environment:
       - SPARK_HOME=/opt/spark
-      - SPARK_MASTER_WEBUI_PORT=443
+      - SPARK_MASTER_WEBUI_PORT=8080
     ports:
-      - "443:8080"
+      - "8080:8080"
     command: ["/opt/spark/sbin/start-master.sh"]
+  spark-worker:
+    image: "docker.io/knoguchi22/spark-rapids-launchables-demo:latest"
+    container_name: spark-master
+    hostname: spark-master
+    user: spark 
+    environment:
+      - SPARK_HOME=/opt/spark
+      - SPARK_MASTER_WEBUI_PORT=8081
+    ports:
+      - "8081:8081"
+    command: ["/opt/spark/sbin/start-worker.sh"]
