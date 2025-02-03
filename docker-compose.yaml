@@ -21,6 +21,16 @@ services:
     ports:
       - "8081:8081"
     command: ["/opt/spark/sbin/start-worker.sh"]
+  spark-worker:
+    image: "docker.io/knoguchi22/spark-rapids-launchables-demo:latest"
+    container_name: spark-worker
+    hostname: spark-master
+    user: spark
+    environment:
+      - SPARK_HOME=/opt/spark
+    ports:
+      - "18080:18080"
+    command: ["/opt/spark/sbin/start-history-server.sh"]
   jupyter:
     image: "docker.io/knoguchi22/spark-rapids-launchables-demo:latest"
     container_name: jupyter
