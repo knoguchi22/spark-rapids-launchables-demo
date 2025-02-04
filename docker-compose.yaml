@@ -9,6 +9,9 @@ services:
       - SPARK_HOME=/opt/spark
     ports:
       - "8080:8080"
+      - "4040:4040"
+      - "4041:4041"
+      - "4042:4042"
     command: ["/opt/spark/sbin/start-master.sh"]
     volumes: 
       - sparkvol:/opt/spark
@@ -55,7 +58,7 @@ services:
       - SPARK_HOME=/opt/spark
     ports:
       - "8888:8888"
-    command: ["/usr/local/bin/jupyter", "notebook"]
+    command: ["/usr/local/bin/jupyter", "lab"]
     volumes: 
       - sparkvol:/opt/spark
     networks:
