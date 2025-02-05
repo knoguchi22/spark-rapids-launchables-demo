@@ -20,7 +20,7 @@ services:
   spark-worker:
     image: "docker.io/knoguchi22/spark-rapids-launchables-demo:latest"
     container_name: spark-worker
-    hostame: spark-worker
+    hostname: spark-worker
     user: spark
     environment:
       - SPARK_NO_DAEMONIZE=true
