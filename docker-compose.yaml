@@ -20,13 +20,16 @@ services:
   spark-worker:
     image: "docker.io/knoguchi22/spark-rapids-launchables-demo:latest"
     container_name: spark-worker
+    hostame: spark-worker
     user: spark
     environment:
       - SPARK_NO_DAEMONIZE=true
       - SPARK_HOME=/opt/spark
     ports:
       - "8081:8081"
-    command: ["/opt/spark/sbin/start-worker.sh", "spark://spark-master:7077"]
+    command: ["/opt/spark/sbin/start-worker.sh", "spark://spark-master:7077",
+              "-Dspark.worker.resource.gpu.amount=$(/opt/sparkRapidsPlugin/getGpusResources.sh | wc -l)",
+              "-Dspark.worker.resource.gpu.discoveryScript=/opt/sparkRapidsPlugin/getGpusResources.sh"]
     depends_on:
       - spark-master
     volumes: 
