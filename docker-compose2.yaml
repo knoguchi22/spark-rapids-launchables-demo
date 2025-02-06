@@ -9,14 +9,9 @@ services:
       - SPARK_HOME=/opt/spark
     ports:
       - "8080:8080"
-      - "4040:4040"
-      - "4041:4041"
-      - "4042:4042"
     command: ["/opt/spark/sbin/start-master.sh"]
     volumes: 
       - sparkvol:/opt/spark
-    networks:
-      - spark
   spark-worker:
     image: "docker.io/knoguchi22/spark-rapids-launchables-demo:latest"
     container_name: spark-worker
@@ -27,13 +22,12 @@ services:
       - SPARK_HOME=/opt/spark
     ports:
       - "8081:8081"
-    command: ["bash",  "-c", "export SPARK_WORKER_OPTS=\"-Dspark.worker.resource.gpu.amount=$(/opt/sparkRapidsPlugin/getGpusResources.sh | wc -l) -Dspark.worker.resource.gpu.discoveryScript=/opt/sparkRapidsPlugin/getGpusResources.sh\"; /opt/spark/sbin/start-worker.sh spark://spark-master:7077"]
+    command: ["bash",  "-c", 
+              "export SPARK_WORKER_OPTS=\"-Dspark.worker.resource.gpu.amount=$(/opt/sparkRapidsPlugin/getGpusResources.sh | wc -l) -Dspark.worker.resource.gpu.discoveryScript=/opt/sparkRapidsPlugin/getGpusResources.sh\"; /opt/spark/sbin/start-worker.sh spark://spark-master:7077"]
     depends_on:
       - spark-master
     volumes: 
       - sparkvol:/opt/spark
-    networks:
-      - spark
   spark-history-server:
     image: "docker.io/knoguchi22/spark-rapids-launchables-demo:latest"
     container_name: spark-history-server
@@ -58,14 +52,15 @@ services:
       - SPARK_HOME=/opt/spark
     ports:
       - "8888:8888"
+      - "4040:4040"
+      - "4041:4041"
+      - "4042:4042"
     command: ["/usr/local/bin/jupyter", "lab"]
     volumes: 
       - sparkvol:/opt/spark
-    networks:
-      - spark
+      - homevol:/home/spark
 
 volumes: 
   sparkvol:
+  homevol:
 
-networks:
-  spark:
