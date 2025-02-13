@@ -23,7 +23,7 @@ services:
     ports:
       - "8081:8081"
     command: ["bash",  "-c", 
-              "export SPARK_WORKER_OPTS=\"-Dspark.worker.resource.gpu.amount=$(/opt/sparkRapidsPlugin/getGpusResources.sh | wc -l) -Dspark.worker.resource.gpu.discoveryScript=/opt/sparkRapidsPlugin/getGpusResources.sh\"; /opt/spark/sbin/start-worker.sh spark://spark-master:7077"]
+              "export SPARK_WORKER_OPTS=\"-Dspark.worker.resource.gpu.amount=$(nvidia-smi --query-gpu=name --format=csv,noheader | wc -l) -Dspark.worker.resource.gpu.discoveryScript=/opt/sparkRapidsPlugin/getGpusResources.sh\"; /opt/spark/sbin/start-worker.sh spark://spark-master:7077"]
     depends_on:
       - spark-master
     volumes: 
@@ -39,6 +39,8 @@ services:
     ports:
       - "18080:18080"
     command: ["/opt/spark/sbin/start-history-server.sh"]
+    depends_on:
+      - spark-master
     volumes: 
       - sparkvol:/opt/spark
   jupyter:
@@ -56,6 +58,8 @@ services:
       - "4041:4041"
       - "4042:4042"
     command: ["/opt/spark/bin/pyspark", "--jars", "/opt/sparkRapidsPlugin/rapids-spark.jar"]
+    depends_on:
+      - spark-master
     volumes: 
       - sparkvol:/opt/spark
       - homevol:/home/spark
